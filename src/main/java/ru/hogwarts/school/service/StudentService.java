@@ -10,6 +10,6 @@ public interface StudentService {
     Student getStudentInfo(Long id); //READ
     List<Student> getAllStudent(); //READ
     Student editStudent(Long id, Student student); //UPDATE
-    Student deleteStudent(Long id); //DELETE
+    void deleteStudent(Long id); //DELETE
     List<Student> getStudentsByAge(int age);
 }

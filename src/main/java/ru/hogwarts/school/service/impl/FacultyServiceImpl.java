@@ -2,6 +2,7 @@ package ru.hogwarts.school.service.impl;
 
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.service.FacultyService;
 
 import java.util.Collection;
@@ -13,42 +14,44 @@ import java.util.stream.Collectors;
 @Service
 public class FacultyServiceImpl implements FacultyService {
 
-    private final Map<Long, Faculty> faculties = new HashMap<>();
-    private static long currentId = 1;
+    private final FacultyRepository facultyRepository;
+
+    public FacultyServiceImpl(FacultyRepository facultyRepository) {
+        this.facultyRepository = facultyRepository;
+    }
 
     @Override
     public Faculty addFaculty(Faculty faculty) {
-        faculty.setId(currentId++);
-        faculties.put(faculty.getId(), faculty);
-        return faculty;
+        return facultyRepository.save(faculty);
     }
 
     @Override
     public Faculty getFacultyInfo(Long id) {
-        return faculties.get(id);
+        return facultyRepository.findById(id).orElse(null);
     }
 
     @Override
     public List<Faculty> getAllFaculties() {
-        return faculties.values().stream().toList();
+        return facultyRepository.findAll();
     }
 
     @Override
     public Faculty editFaculty(Long id, Faculty faculty) {
-        Faculty editableFaculty = faculties.get(id);
-        editableFaculty.setName(faculty.getName());
-        editableFaculty.setColor(faculty.getColor());
-        return editableFaculty;
+       return facultyRepository.findById(id).map(editableFaculty -> {
+           editableFaculty.setName(faculty.getName());
+           editableFaculty.setColor(faculty.getColor());
+           return facultyRepository.save(editableFaculty);
+       }).orElse(null);
     }
 
     @Override
-    public Faculty deleteFaculty(Long id) {
-        return faculties.remove(id);
+    public void deleteFaculty(Long id) {
+        facultyRepository.deleteById(id);
     }
 
     @Override
     public List<Faculty> getFacultiesByColor(String color) {
-        return faculties.values()
+        return facultyRepository.findAll()
                 .stream()
                 .filter(f -> f.getColor().toLowerCase().equals(color.toLowerCase()))
                 .collect(Collectors.toList());

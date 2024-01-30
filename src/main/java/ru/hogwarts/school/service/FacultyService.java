@@ -10,7 +10,7 @@ public interface FacultyService {
     Faculty getFacultyInfo(Long id); // READ
     List<Faculty> getAllFaculties(); //READ
     Faculty editFaculty(Long id, Faculty faculty); //UPDATE
-    Faculty deleteFaculty(Long id); //DELETE
+    void deleteFaculty(Long id); //DELETE
     List<Faculty> getFacultiesByColor(String color);
 
 }
