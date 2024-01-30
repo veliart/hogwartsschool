@@ -2,6 +2,7 @@ package ru.hogwarts.school.service.impl;
 
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repository.StudentRepository;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
@@ -13,45 +14,45 @@ import java.util.stream.Collectors;
 @Service
 public class StudentServiceImpl implements StudentService {
 
-    private final Map<Long, Student> students = new HashMap<>();
+    private final StudentRepository studentRepository;
 
-    private static long currentId = 1;
+    public StudentServiceImpl(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
 
     @Override
     public Student addStudent(Student student) {
-        student.setId(currentId++);
-        students.put(student.getId(), student);
-        return student;
+        return studentRepository.save(student);
     }
 
     @Override
     public Student getStudentInfo(Long id) {
-        return students.get(id);
+        return studentRepository.findById(id).orElse(null);
     }
 
     @Override
     public List<Student> getAllStudent() {
-        return students.values().stream().toList();
+        return studentRepository.findAll();
     }
 
     @Override
     public Student editStudent(Long id, Student student) {
-        Student editableStudent = students.get(id);
-        editableStudent.setName(student.getName());
-        editableStudent.setAge(student.getAge());
-
-        return editableStudent;
+        return studentRepository.findById(id)
+                .map(editаbleStudent -> {
+                    editаbleStudent.setName(student.getName());
+                    editаbleStudent.setAge(student.getAge());
+                    return studentRepository.save(editаbleStudent);
+                }).orElse(null);
     }
 
     @Override
-    public Student deleteStudent(Long id) {
-        return students.remove(id);
+    public void deleteStudent(Long id) {
+        studentRepository.deleteById(id);
     }
 
     @Override
     public List<Student> getStudentsByAge(int age) {
-        return students.values()
-                .stream()
+        return studentRepository.findAll().stream()
                 .filter(s -> s.getAge() == age)
                 .collect(Collectors.toList());
     }
