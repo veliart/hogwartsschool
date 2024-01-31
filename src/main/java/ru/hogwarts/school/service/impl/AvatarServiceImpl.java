@@ -15,7 +15,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static io.swagger.v3.core.util.AnnotationsUtils.getExtensions;
+
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 
@@ -58,7 +58,7 @@ public class AvatarServiceImpl implements AvatarService {
     }
 
     private String getExtensions(String fileName) {
-        return fileName.substring(fileName.lastIndexOf("." + 1));
+        return fileName.substring(fileName.lastIndexOf(".") +1 );
     }
     public Avatar findStudentAvatar(Long id)  {
         return avatarRepository.findById(id).orElse(new Avatar());

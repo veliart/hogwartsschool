@@ -9,10 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.service.AvatarService;
 
-import java.awt.*;
 import java.io.IOException;
 
-@RestController
+@RestController("student")
 public class AvatarController {
     private final AvatarService avatarService;
 
