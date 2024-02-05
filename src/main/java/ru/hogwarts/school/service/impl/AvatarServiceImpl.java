@@ -61,7 +61,7 @@ public class AvatarServiceImpl implements AvatarService {
         return fileName.substring(fileName.lastIndexOf(".") +1 );
     }
     public Avatar findStudentAvatar(Long id)  {
-        return avatarRepository.findById(id).orElse(new Avatar());
+        return avatarRepository.findByStudent_id(id).orElse(new Avatar());
     }
 
 }
