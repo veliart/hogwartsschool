@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 @RestController("student")
 public class AvatarController {
@@ -57,5 +58,12 @@ public class AvatarController {
             inputStream.transferTo(outputStream);
         }
 
+    }
+    @GetMapping("avatars")
+    public List<Avatar> getPaginatedAvatars(
+            @RequestParam int pageNumber,
+            @RequestParam int pageSize
+    ) {
+        return avatarService.getPaginatedAvatars(pageNumber, pageSize);
     }
 }
