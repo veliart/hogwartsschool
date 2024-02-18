@@ -70,4 +70,19 @@ public class StudentServiceImpl implements StudentService {
                 .orElse(null);
 
     }
+
+    @Override
+    public int getAmountStudents() {
+        return studentRepository.getAmountStudents();
+    }
+
+    @Override
+    public Long getAverageAgeStudents() {
+        return studentRepository.getAverageAgeStudents();
+    }
+
+    @Override
+    public List<Student> getLastFiveStudents() {
+        return studentRepository.getLastFiveStudents();
+    }
 }
