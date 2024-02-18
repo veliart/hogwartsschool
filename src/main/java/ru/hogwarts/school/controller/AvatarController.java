@@ -7,6 +7,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.hogwarts.school.dto.AvatarDTO;
+import ru.hogwarts.school.mapper.AvatarMapper;
 import ru.hogwarts.school.service.AvatarService;
 import ru.hogwarts.school.model.Avatar;
 
@@ -16,13 +18,16 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController("student")
 public class AvatarController {
     private final AvatarService avatarService;
+    private final AvatarMapper avatarMapper;
 
-    public AvatarController(AvatarService avatarService) {
+    public AvatarController(AvatarService avatarService, AvatarMapper avatarMapper) {
         this.avatarService = avatarService;
+        this.avatarMapper = avatarMapper;
     }
 
     @PostMapping (value = "/{id}/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -60,10 +65,13 @@ public class AvatarController {
 
     }
     @GetMapping("avatars")
-    public List<Avatar> getPaginatedAvatars(
+    public List<AvatarDTO> getPaginatedAvatars(
             @RequestParam int pageNumber,
             @RequestParam int pageSize
     ) {
-        return avatarService.getPaginatedAvatars(pageNumber, pageSize);
+        return avatarService.getPaginatedAvatars(pageNumber, pageSize)
+                .stream()
+                .map(avatarMapper::matToDTO)
+                .collect(Collectors.toList());
     }
 }
