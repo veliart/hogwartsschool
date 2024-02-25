@@ -2,6 +2,8 @@ package ru.hogwarts.school.service.impl;
 
 
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,8 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @Transactional // Для работы вместе с аннотацией @Lob
 public class AvatarServiceImpl implements AvatarService {
 
+    private static final Logger logger = LoggerFactory.getLogger(AvatarServiceImpl.class);
+
     @Value("${path.to.avatars.folder}")
     private String avatarsDir;
 
@@ -38,6 +42,7 @@ public class AvatarServiceImpl implements AvatarService {
 
     @Override
     public void uploadAvatar(Long id, MultipartFile avatarFile) throws IOException {
+        logger.info("Log info: Method uploadAvatar is invoke.");
         Student student = studentService.getStudentInfo(id);
         Path pathFile = Path.of(avatarsDir, student + "." + getExtensions(avatarFile.getOriginalFilename()));
         Files.createDirectories(pathFile.getParent());
@@ -60,14 +65,17 @@ public class AvatarServiceImpl implements AvatarService {
     }
 
     private String getExtensions(String fileName) {
+        logger.info("Log info: Method getExtensions is invoke.");
         return fileName.substring(fileName.lastIndexOf(".") +1 );
     }
     public Avatar findStudentAvatar(Long id)  {
+        logger.info("Log info: Method findStudentAvatar is invoke.");
         return avatarRepository.findByStudent_id(id).orElse(new Avatar());
     }
 
     @Override
     public List<Avatar> getPaginatedAvatars(int pageNumber, int pageSize) {
+        logger.info("Log info: Method getPaginatedAvatars is invoke.");
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
         return avatarRepository.findAll(pageRequest).getContent();
     }
