@@ -18,4 +18,6 @@ public interface FacultyService {
 
     List<Student> getStudentsByFaculty(long id);
 
+    String getLongFacultyName();
+
 }
