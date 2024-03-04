@@ -27,4 +27,12 @@ public interface StudentService {
     Long getAverageAgeStudents();
 
     List<Student> getLastFiveStudents();
+
+    List<String> getAllStudentNameBeginLetterA();
+
+    Double getAverageAge();
+
+    void printParallel();
+
+    void printSynchronized();
 }
